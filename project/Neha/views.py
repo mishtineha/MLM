@@ -1,10 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User
 from Neha.models import *
 # Create your views here.
 
+@login_required
 def dashboard(request):
+    if request.user.is_authenticated is False:
+        return redirect('login')
     return render(request, 'Neha/dashboard.html')
+
 
 def add_new(request):
     print(request.POST)
@@ -15,7 +20,6 @@ def add_new(request):
     if username and email:
         User.objects.create_user(username=username, password=password, email=email)
         return redirect('dash')
-
 
     return render(request, 'Neha/add_new.html')
 
@@ -43,5 +47,10 @@ def tree(request):
     return render(request,'Neha/tree.html',{'tree':tree})
 
 
-
+def member_list(request):
+    members = Profile.objects.all().exclude(user=request.user)
+    context = {
+        'members':members
+    }
+    return render(request, 'Neha/all_members.html',context)
 

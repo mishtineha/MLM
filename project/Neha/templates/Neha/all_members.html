@@ -1,0 +1,86 @@
+{% extends 'Neha/base.html' %}
+{% block content %}
+{% include 'Neha/sidenav.html' %}
+  <!-- Main content -->
+  <div class="main-content" id="panel">
+    <!-- Topnav -->
+    {% include  'Neha/nav.html'%}
+ <div class="container-fluid mt-4 ">
+   <div class="row">
+        <div class="col-md-12">
+          <div class="card bg-default shadow">
+            <div class="card-header bg-transparent border-0">
+              <h3 class="text-white mb-0">Members</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-dark table-flush">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col" class="sort" data-sort="name">Sr No.</th>
+                    <th scope="col" class="sort" data-sort="name">User Name</th>
+                    <th scope="col" class="sort" data-sort="budget">User Id</th>
+                    <th scope="col" class="sort" data-sort="status">Full Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col" class="sort" data-sort="completion">Email</th>
+                    <th scope="col" class="sort" data-sort="completion">Actions</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody class="list">
+                {% for i in members %}
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="name mb-0 text-sm">{{forloop.counter}}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td class="budget">
+                      {{i.username}}
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-warning"></i>
+                        <span class="status">{{i.id}}</span>
+                      </span>
+                    </td>
+                    <td>
+                      <div class="avatar-group">
+                          <span class="status">{{i.first_name}} {{i.last_name}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">{{i.phone}}</span>
+                        <div>
+                        </div>
+                      </div>
+                    </td>
+                             <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">{{i.email}}</span>
+                        <div>
+                        </div>
+                      </div>
+                    </td>
+                   <td>
+                      <div class="d-flex align-items-center">
+                          <a href="" class="btn btn-primary btn-sm">Profile</a>
+                          <div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+ </div>
+          {% include 'Neha/footer.html' %}
+    </div>
+
+{% endblock content %}

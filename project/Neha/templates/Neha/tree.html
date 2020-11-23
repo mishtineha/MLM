@@ -89,7 +89,7 @@ height: 20px;
         {% include  'Neha/nav.html'%}
     <div class="container-fluid ">
       <div class="row">
-        <div class="col-xl-8">
+        <div class="col">
         <div class="text-center">
             <form class="mt-4  form" method="post">
                  {% csrf_token %}
@@ -108,7 +108,7 @@ height: 20px;
             <div class="col"></div>
              <div class="col mx-auto">
              <div class="text-center">
-            <div class="tree" id="FamilyTreeDiv">
+         <div class="tree" id="FamilyTreeDiv">
          <ul>
              <li>
                  <a href="#" data-toggle="tooltip" data-original-title="ParentId:{{ tree.parent|parent_id }},Amount:{{ tree.parent|calculate_commission }},Child:{{ tree.parent|No_of_child }}">
