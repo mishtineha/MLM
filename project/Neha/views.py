@@ -19,6 +19,8 @@ def add_new(request):
 
     return render(request, 'Neha/add_new.html')
 
+
+
 def check_user(parent_username,child_username):
     parent_tree = Tree.objects.get(parent__user__username = parent_username)
     if parent_tree.sub_tree.filter(parent__user__username = child_username).exists() or parent_username == child_username:
@@ -27,6 +29,7 @@ def check_user(parent_username,child_username):
         if check_user(tree.parent.user.username,child_username):
             return True
     return False
+
 
 def tree(request):
     if request.method == "POST":
