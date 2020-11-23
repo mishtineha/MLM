@@ -1,0 +1,25 @@
+
+{% load static %}
+{% load details %}
+<li>
+<!-- <div class="col mx-auto">-->
+<!--        <div class="text-center"> -->
+    <a href="#" data-toggle="tooltip" data-original-title="ParentId:{{ node.parent|parent_id }},Amount:{{ node.parent|calculate_commission }},Child:{{ node.parent|No_of_child }}">
+            {{node.parent }}
+            <br>
+            <img src="{% static 'img/icons/common/profile2.png' %}">
+</a>
+<!--        </div>-->
+    {%if node.sub_tree %}
+<!--        <div class="row" id="tree">-->
+    <ul>
+         {%for ch in node.sub_tree.all %}
+              {%with node=ch template_name="Neha/base_tree.html" %}
+                   {%include template_name%}
+              {%endwith%}
+         {%endfor%}
+    </ul>
+    {%endif%}
+        </li>
+
+

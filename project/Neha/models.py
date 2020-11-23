@@ -13,20 +13,23 @@ class Profile(models.Model):
     pan_card = models.IntegerField()
 
     def __str__(self):
-        return self.first_name
+        return self.user.username
 
 
 def post_save_member(sender, instance, created, *args, **kwargs):
     if created:
+        print("in post_save_member")
         try:
             Profile.objects.create(user=instance, email=instance.email)
         except:
             pass
 
 
-post_save.connect(post_save_member, sender=User)
+# post_save.connect(post_save_member, sender=User)
 
 class Tree(models.Model):
     parent = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    sub_tree = models.ManyToManyField('self', symmetrical=False)
+    sub_tree = models.ManyToManyField('self', symmetrical=False,blank=True)
+    def __str__(self):
+        return self.parent.user.username
 # Create your models here.
