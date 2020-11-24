@@ -1,0 +1,83 @@
+{% extends 'Neha/base.html' %}
+{% block content %}
+{% include 'Neha/sidenav.html' %}
+  <!-- Main content -->
+  <div class="main-content" id="panel">
+    <!-- Topnav -->
+    {% include  'Neha/nav.html'%}
+           <div class="header pb-6 d-flex align-items-center" style="min-height: 500px; background-image: url(https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29ubmVjdGlvbnxlbnwwfHwwfA%3D%3D&auto=format&fit=crop&w=500&q=60); background-size: cover; background-position: center top;">
+      <!-- Mask -->
+      <span class="mask bg-gradient-default opacity-8"></span>
+      <!-- Header container -->
+      <div class="container-fluid d-flex align-items-center">
+        <div class="row">
+          <div class="col-lg-7 col-md-10">
+            <h1 class="display-2 text-white">Profile - {{member.first_name}}</h1>
+            <p class="text-white mt-0 mb-5">This is the profile page. You can see profile here, Thank you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   <div class="row">
+        <div class="col-xl-4 ml-4 mt-4 order-xl-2">
+          <div class="card card-profile">
+            <img src="https://images.unsplash.com/photo-1472148083604-64f1084980b9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="Image placeholder" class="card-img-top">
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                  <a href="#">
+                    <img src="https://i.dlpng.com/static/png/7105396_preview.png" class="rounded-circle">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+              <div class="d-flex justify-content-between">
+                <a href="#" class="btn btn-sm btn-info  mr-4 ">Connect</a>
+                <a href="#" class="btn btn-sm btn-default float-right">Message</a>
+              </div>
+            </div>
+            <div class="card-body pt-0">
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center">
+                    <div>
+                      <span class="heading">22</span>
+                      <span class="description">Friends</span>
+                    </div>
+                    <div>
+                      <span class="heading">10</span>
+                      <span class="description">Photos</span>
+                    </div>
+                    <div>
+                      <span class="heading">89</span>
+                      <span class="description">Comments</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h5 class="h3">
+                  {{member.first_name}} {{member.last_name}}<span class="font-weight-light">, 27</span>
+                </h5>
+                <div class="h5 font-weight-300">
+                  <i class="ni location_pin mr-2"></i>{{member.email}}
+                </div>
+                <div class="h5 mt-4">
+                  <i class="ni business_briefcase-24 mr-2"></i>Phone - {{member.phone}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+            <!-- Footer -->
+
+
+   </div>
+
+      {% include 'Neha/footer.html' %}
+    </div>
+{% endblock content %}

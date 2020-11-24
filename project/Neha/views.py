@@ -54,3 +54,13 @@ def member_list(request):
     }
     return render(request, 'Neha/all_members.html',context)
 
+
+def profile(request):
+    member = Profile.objects.filter(user=request.user)[0]
+    context = {
+        'member':member
+    }
+    return render(request, 'Neha/Profile.html',context)
+
+def edit_profile(request):
+    return render(request, 'Neha/edit_profile.html')
