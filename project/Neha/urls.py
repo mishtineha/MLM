@@ -7,4 +7,5 @@ urlpatterns = [
     path('all_members/',member_list, name="list"),
     path('profile', profile, name='profile'),
     path('edit_profile', edit_profile, name='edit-profile'),
+    path('update_profile/<int:id>', admin_edit_profile, name='update-profile'),
 ]

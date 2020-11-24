@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User
 from Neha.models import *
+from .forms import ProfileForm
 # Create your views here.
 
 @login_required
@@ -10,7 +11,7 @@ def dashboard(request):
         return redirect('login')
     return render(request, 'Neha/dashboard.html')
 
-
+@login_required
 def add_new(request):
     print(request.POST)
     username = request.POST.get('username')
@@ -24,7 +25,7 @@ def add_new(request):
     return render(request, 'Neha/add_new.html')
 
 
-
+@login_required
 def check_user(parent_username,child_username):
     parent_tree = Tree.objects.get(parent__user__username = parent_username)
     if parent_tree.sub_tree.filter(parent__user__username = child_username).exists() or parent_username == child_username:
@@ -35,6 +36,7 @@ def check_user(parent_username,child_username):
     return False
 
 
+@login_required
 def tree(request):
     if request.method == "POST":
         data = request.POST['userid']
@@ -47,6 +49,7 @@ def tree(request):
     return render(request,'Neha/tree.html',{'tree':tree})
 
 
+@login_required
 def member_list(request):
     members = Profile.objects.all().exclude(user=request.user)
     context = {
@@ -55,6 +58,7 @@ def member_list(request):
     return render(request, 'Neha/all_members.html',context)
 
 
+@login_required
 def profile(request):
     member = Profile.objects.filter(user=request.user)[0]
     context = {
@@ -62,5 +66,38 @@ def profile(request):
     }
     return render(request, 'Neha/Profile.html',context)
 
+
+@login_required
 def edit_profile(request):
-    return render(request, 'Neha/edit_profile.html')
+    member = Profile.objects.filter(user=request.user)[0]
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            print('save')
+    form = ProfileForm(instance=member)
+    context = {
+        'form':form,
+        'member':member
+    }
+    return render(request, 'Neha/edit_profile.html',context)
+
+
+@login_required
+def admin_edit_profile(request,id):
+    member = Profile.objects.get(id=id)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            print('save')
+    form = ProfileForm(instance=member)
+    context = {
+        'form':form,
+        'member':member
+    }
+    return render(request, 'Neha/admin_edit_profile.html',context)
