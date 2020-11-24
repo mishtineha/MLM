@@ -18,15 +18,27 @@ def add_new(request):
     phone = request.POST.get('phone')
     email = request.POST.get('email')
     password = username
+    if User.objects.filter(username=username).exists():
+        message = 'This Username already exists, please choose another one! '
+        context = {'message':message}
+        return render(request, 'Neha/add_new.html', context)
     if username and email:
-        User.objects.create_user(username=username, password=password, email=email)
+        user = User.objects.create_user(username=username, password=password, email=email)
+        p = Profile.objects.create(user=user, email=email, phone=phone)
+        t= Tree.objects.create(parent=p)
+        parent_tree = Tree.objects.get(parent = Profile.objects.get(user = request.user))
+        parent_tree.sub_tree.add(t)
+        parent_tree.save()
+
         return redirect('dash')
 
     return render(request, 'Neha/add_new.html')
 
 
-@login_required
+# @login_required
 def check_user(parent_username,child_username):
+    print("CHild username")
+    print(child_username)
     parent_tree = Tree.objects.get(parent__user__username = parent_username)
     if parent_tree.sub_tree.filter(parent__user__username = child_username).exists() or parent_username == child_username:
         return True
@@ -52,8 +64,13 @@ def tree(request):
 @login_required
 def member_list(request):
     members = Profile.objects.all().exclude(user=request.user)
+    mem = []
+    for m in members:
+        if check_user(request.user.username,m.user.username):
+            mem.append(m)
+
     context = {
-        'members':members
+        'members':mem
     }
     return render(request, 'Neha/all_members.html',context)
 
@@ -71,7 +88,7 @@ def profile(request):
 def edit_profile(request):
     member = Profile.objects.filter(user=request.user)[0]
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
+        form = ProfileForm(request.POST, request.FILES,instance=member)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = request.user
@@ -89,7 +106,7 @@ def edit_profile(request):
 def admin_edit_profile(request,id):
     member = Profile.objects.get(id=id)
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
+        form = ProfileForm(request.POST, request.FILES,instance = member)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = request.user

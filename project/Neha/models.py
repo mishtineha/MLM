@@ -9,26 +9,15 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=200)
     phone = models.IntegerField()
     email =models.EmailField(null=True)
-    profile_pic = models.ImageField(upload_to='profile', default='default.png')
-    pan_card = models.IntegerField()
+    profile_pic = models.ImageField(upload_to='profile', default='default.png',null=True)
+    pan_card = models.IntegerField(null=True)
 
     def __str__(self):
         return self.user.username
 
 
-def post_save_member(sender, instance, created, *args, **kwargs):
-    if created:
-        print("in post_save_member")
-        try:
-            Profile.objects.create(user=instance, email=instance.email)
-        except:
-            pass
-
-
-# post_save.connect(post_save_member, sender=User)
-
 class Tree(models.Model):
-    parent = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    parent = models.OneToOneField(Profile, on_delete=models.CASCADE)
     sub_tree = models.ManyToManyField('self', symmetrical=False,blank=True)
     def __str__(self):
         return self.parent.user.username

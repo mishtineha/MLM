@@ -1,5 +1,6 @@
 {% extends 'Neha/base.html' %}
 {% block content %}
+{% load details %}
 {% load crispy_forms_tags %}
 {% include 'Neha/sidenav.html' %}
   <!-- Main content -->
@@ -42,18 +43,18 @@
             <div class="card-body pt-0">
               <div class="row">
                 <div class="col">
-                  <div class="card-profile-stats d-flex justify-content-center">
+                    <div class="card-profile-stats d-flex justify-content-center">
                     <div>
-                      <span class="heading">22</span>
-                      <span class="description">Friends</span>
+                        <span class="heading">{{ request.user.username|No_of_child }}</span>
+                      <span class="description">User</span>
                     </div>
                     <div>
-                      <span class="heading">10</span>
-                      <span class="description">Photos</span>
+                       <span class="heading">{{ request.user.username|parent_id }}</span>
+                      <span class="description">ParentId</span>
                     </div>
                     <div>
-                      <span class="heading">89</span>
-                      <span class="description">Comments</span>
+                       <span class="heading">{{ request.user.username|calculate_commission }}</span>
+                      <span class="description">Commission</span>
                     </div>
                   </div>
                 </div>

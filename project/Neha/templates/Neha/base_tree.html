@@ -14,7 +14,7 @@
 <!--        <div class="row" id="tree">-->
     <ul>
          {%for ch in node.sub_tree.all %}
-              {%with node=ch template_name="Neha/base_tree.html" %}
+              {% with node=ch template_name="Neha/base_tree.html" %}
                    {%include template_name%}
               {%endwith%}
          {%endfor%}

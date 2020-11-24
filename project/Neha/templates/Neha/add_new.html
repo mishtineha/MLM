@@ -61,6 +61,9 @@
                     <input name="phone" type="tel"  id="inputEmail2" class="form-control" placeholder="Mobile Number" required autofocus>
                   </div>
                 </div>
+                {% if message %}
+                <p class="text-danger">{{message}}</p>
+                {% endif %}
                 <div class="text-center">
                   <button class="btn btn-primary mt-4">Add Member</button>
                 </div>
