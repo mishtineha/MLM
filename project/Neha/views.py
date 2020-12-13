@@ -11,9 +11,21 @@ def dashboard(request):
         return redirect('login')
     return render(request, 'Neha/dashboard.html')
 
+def No_of_child(username,count=0):
+    tree = Tree.objects.get(parent__user__username=username)
+    count += len(tree.sub_tree.all())
+    for t in tree.sub_tree.all():
+        count = No_of_child(t.parent.user.username,count)
+    return count
+
 @login_required
 def add_new(request):
-    print(request.POST)
+    if No_of_child(request.user.username) > 12:
+        message = 'Already 12 users are added you cannot add more!'
+        context = {'message': message}
+        return render(request, 'Neha/add_new.html', context)
+
+
     username = request.POST.get('username')
     phone = request.POST.get('phone')
     email = request.POST.get('email')
@@ -34,6 +46,33 @@ def add_new(request):
 
     return render(request, 'Neha/add_new.html')
 
+@login_required
+def add_auto_pool(request):
+    p = Profile.objects.get(user=request.user)
+    username = request.POST.get('username')
+    phone = request.POST.get('phone')
+    email = request.POST.get('email')
+    password = username
+    if User.objects.filter(username=username).exists():
+        message = 'This Username already exists, please choose another one! '
+        context = {'message': message}
+        return render(request, 'Neha/add_new.html', context)
+    if username and email:
+        user = User.objects.create_user(username=username, password=password, email=email)
+        AutoPool_Profile.objects.create(user=user, email=email, phone=phone,created_by=p)
+
+        return redirect('dash')
+
+    return render(request, 'Neha/add_new.html')
+
+@login_required
+def autopooltree(request):
+    try:
+        p = Profile.objects.get(user=request.user,is_admin = True)
+    except:
+        return HttpResponse(status = 404)
+    mem = AutoPool_Profile.objects.filter(created_by = p)
+    return render(request,'autopooltree.html',{'mem':mem})
 
 # @login_required
 def check_user(parent_username,child_username):
@@ -63,7 +102,7 @@ def tree(request):
 
 @login_required
 def member_list(request):
-    members = Profile.objects.all().exclude(user=request.user)
+    members = Profile.objects.all().exclude(user=request.user)[30:40]
     mem = []
     for m in members:
         if check_user(request.user.username,m.user.username):

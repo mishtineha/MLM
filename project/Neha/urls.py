@@ -3,6 +3,7 @@ from .views import *
 urlpatterns = [
     path('', dashboard, name='dash'),
     path('add-new', add_new, name='add_new'),
+    path('add-autopool',add_auto_pool,name='add_auto_pool'),
     path('tree/',tree,name="tree"),
     path('all_members/',member_list, name="list"),
     path('profile', profile, name='profile'),
