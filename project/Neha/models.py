@@ -36,4 +36,11 @@ class Tree(models.Model):
     sub_tree = models.ManyToManyField('self', symmetrical=False,blank=True)
     def __str__(self):
         return self.parent.user.username
+
+
+class AutoTree(models.Model):
+    parent = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    sub_tree = models.ManyToManyField('self', symmetrical=False,blank=True)
+    def __str__(self):
+        return self.parent.user.username
 # Create your models here.

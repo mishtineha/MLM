@@ -3,4 +3,4 @@ from .models import *
 # Register your models here.
 admin.site.register(Profile)
 admin.site.register(Tree)
-admin.site.register(AutoPool_Profile)
+admin.site.register(AutoTree)

@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User
 from Neha.models import *
 from .forms import ProfileForm
+from django.db.models import Count
 # Create your views here.
 
 @login_required
@@ -41,6 +42,9 @@ def add_new(request):
         parent_tree = Tree.objects.get(parent = Profile.objects.get(user = request.user))
         parent_tree.sub_tree.add(t)
         parent_tree.save()
+        child_tree =  AutoTree.objects.create(parent = p)
+        autotree = AutoTree.objects.annotate(c = Count('sub_tree')).filter(c__lte = 2)[0]
+        autotree.sub_tree.add(child_tree)
 
         return redirect('dash')
 
@@ -65,14 +69,23 @@ def add_auto_pool(request):
 
     return render(request, 'Neha/add_new.html')
 
+# def get_mem(profiles,parent_tree):
+#     for p in profiles:
+#         autotree,c = AutoTree.objects.get_or_create(parent = p)
+#             if len(parent_tree.sub_tree.all()) < 3:
+#                 parent_tree.sub_tree.add(autotree)
+#
+#
+
 @login_required
 def autopooltree(request):
     try:
-        p = Profile.objects.get(user=request.user,is_admin = True)
+        p = Profile.objects.get(user=request.user)
     except:
         return HttpResponse(status = 404)
-    mem = AutoPool_Profile.objects.filter(created_by = p)
-    return render(request,'autopooltree.html',{'mem':mem})
+    tree = AutoTree.objects.get(parent = p)
+    return render(request, 'Neha/tree.html', {'tree': tree,'len':len(tree.sub_tree.all())})
+
 
 # @login_required
 def check_user(parent_username,child_username):
@@ -97,7 +110,7 @@ def tree(request):
         tree = Tree.objects.get(parent__user__username=data)
         return render(request, 'Neha/tree.html', {'tree': tree,'value':data})
     tree = Tree.objects.get(parent__user = request.user)
-    return render(request,'Neha/tree.html',{'tree':tree})
+    return render(request,'Neha/tree.html',{'tree':tree,'len':len(tree.sub_tree.all())})
 
 
 @login_required
