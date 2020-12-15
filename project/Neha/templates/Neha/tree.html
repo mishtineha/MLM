@@ -21,7 +21,9 @@
 
 .tree {
     margin: 0 0 1em;
+
     padding-left:5%;
+
     text-align: center;
 }
 .tree, .tree ul {
@@ -33,7 +35,12 @@
 
     .tree li {
         display: table-cell;
-        padding: .5em 1em 3em 3em;
+        {% if len > 10 %}
+         padding: .5em 1em 3em 3em;
+        {% else %}
+        padding: .5em 2.5em 3em 3em;
+        {% endif %}
+
         vertical-align: top;
     }
         /* _________ */
