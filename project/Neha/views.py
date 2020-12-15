@@ -1,8 +1,11 @@
+from datetime import datetime, date, timedelta
+from django.utils.translation import ugettext as _
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,HttpResponse
-from django.contrib.auth.models import User
 from Neha.models import *
-from .forms import ProfileForm
+from .forms import ProfileForm, PasswordChange
 from django.db.models import Count
 # Create your views here.
 
@@ -10,7 +13,22 @@ from django.db.models import Count
 def dashboard(request):
     if request.user.is_authenticated is False:
         return redirect('login')
-    return render(request, 'Neha/dashboard.html')
+    total_members = Profile.objects.all().count()
+    print(total_members)
+    today = datetime.today()
+    last_seven = datetime.now() - timedelta(days=6)
+    last_seven_date = last_seven.date()
+    newmem_count = Profile.objects.all().filter(created_at__date__range=[last_seven_date,today]).count()
+    print(newmem_count)
+    your_commission = "Rs.30000"
+    revenue = "90%"
+    context = {
+        'total_mem':total_members,
+        'new_mem':newmem_count,
+        'rev':revenue,
+        'comm':your_commission
+    }
+    return render(request, 'Neha/dashboard.html',context)
 
 def No_of_child(username,count=0):
     tree = Tree.objects.get(parent__user__username=username)
@@ -170,3 +188,24 @@ def admin_edit_profile(request,id):
         'member':member
     }
     return render(request, 'Neha/admin_edit_profile.html',context)
+
+
+@login_required
+def change_password(request,id):
+    new_pass = request.POST.get('new_password1')
+    new_pass2 = request.POST.get('new_password2')
+    if new_pass != new_pass2:
+        messages.warning(request, _('Please Enter Same Password'))
+        return redirect(f'../change_password/{id}')
+    userr = User.objects.get(id=id)
+    print(userr.password)
+    if request.method == 'POST':
+        userr.set_password(new_pass)
+        update_session_auth_hash(request, request.user)
+        userr.save()
+        print('succe')
+        messages.success(request, _(f'password has been successfully updated! of {userr.username}'))
+        return redirect('list')
+    else:
+        form = PasswordChange()
+    return render(request, 'Neha/change_password.html', {'form': form})

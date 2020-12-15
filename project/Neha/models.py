@@ -11,7 +11,7 @@ class Profile(models.Model):
     email =models.EmailField(null=True)
     profile_pic = models.ImageField(upload_to='profile', default='default.png',null=True)
     pan_card = models.IntegerField(null=True)
-    created_at = models.DateTimeField(auto_now_add = True)
+    created_at = models.DateTimeField(auto_now_add = True,null=True)
     created_by = models.ForeignKey(User,on_delete = models.SET_NULL,null = True,related_name="created_by")
     is_admin = models.BooleanField(default = False)
 
