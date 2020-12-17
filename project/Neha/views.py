@@ -142,7 +142,7 @@ def tree(request):
 
 @login_required
 def member_list(request):
-    members = Profile.objects.all().exclude(user=request.user)[30:40]
+    members = Profile.objects.all().exclude(user=request.user)    ###[30:40]
     mem = []
     for m in members:
         if check_user(request.user.username,m.user.username):
