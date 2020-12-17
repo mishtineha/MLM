@@ -1,7 +1,112 @@
 
 {% extends 'Neha/base.html' %}
 {% block content %}
-{% include 'Neha/sidenav.html' %}
+{% load static %}
+ <link rel="stylesheet" href="{% static 'css/argon.css'%}" type="text/css">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>
+  <script src="{% static 'vendor/jquery/dist/jquery.min.js'%}"></script>
+  <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
+  <script src="{% static 'vendor/js-cookie/js.cookie.js'%}"></script>
+  <script src="{% static 'vendor/jquery.scrollbar/jquery.scrollbar.min.js'%}"></script>
+  <script src="{% static 'vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js'%}"></script>
+  <!-- Argon JS -->
+
+<script src="{% static 'js/argon.js'%}"></script>
+<div style="display:none;" id="menu-bar">
+<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main2">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header  d-flex  align-items-center">
+        <a class="navbar-brand" href="javascript:void(0)">
+          <img src="https://i.dlpng.com/static/png/7105396_preview.png" class="navbar-brand-img" alt="...">
+        </a>
+
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+            &nbsp;&nbsp;&nbsp;
+          <!-- Sidenav toggler -->
+
+           <div class="openmenu sidenav-toggler-inner text-right" style="float:right;">
+             <i class="ni ni-fat-remove"></i>
+
+                </div>
+
+
+      </div>
+
+      <div class="navbar-inner">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Nav items -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'dash' %}">
+                <i class="ni ni-tv-2 text-primary"></i>
+                <span class="nav-link-text">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_new' %}">
+                <i class="ni ni-planet text-orange"></i>
+                <span class="nav-link-text">Add Member</span>
+              </a>
+            </li>
+<!--             <li class="nav-item">-->
+<!--              <a class="nav-link" href="{% url 'add_auto_pool' %}">-->
+<!--                <i class="ni ni-planet text-orange"></i>-->
+<!--                <span class="nav-link-text">Add AutoPool Member</span>-->
+<!--              </a>-->
+<!--            </li>-->
+                   <li class="nav-item">
+              <a class="nav-link" href="{% url 'list' %}">
+                <i class="ni ni-active-40 text-primary"></i>
+                <span class="nav-link-text">your Member</span>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' %}">
+                <i class="ni ni-single-02 text-yellow"></i>
+                <span class="nav-link-text">Profile</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'tree' %}">
+                <i class="ni ni-bullet-list-67 text-default"></i>
+                <span class="nav-link-text">Members Tree</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'autopooltree' %}">
+                <i class="ni ni-bullet-list-67 text-default"></i>
+                <span class="nav-link-text">Auto Tree</span>
+              </a>
+            </li>
+                     <li class="nav-item">
+              <a class="nav-link" href="{% url 'edit-profile' %}">
+                <i class="ni ni-single-02 text-info"></i>
+                <span class="nav-link-text">edit Profile</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">
+                <i class="ni ni-key-25 text-info"></i>
+                <span class="nav-link-text">Logout</span>
+              </a>
+            </li>
+
+
+          </ul>
+          <!-- Divider -->
+          <hr class="my-3">
+          <!-- Heading -->
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
 
 {% load static %}
 {% load details %}
@@ -13,7 +118,7 @@
 /* It's supposed to look like a tree diagram */
 .tree, .tree ul, .tree li {
     list-style: none;
-    font-size:10pt;
+    font-size:15pt;
     margin: 0;
     padding: 0;
     position: relative;
@@ -21,10 +126,6 @@
 
 .tree {
     margin: 0 0 1em;
-
-    padding-left:5%;
-
-    text-align: center;
 }
 .tree, .tree ul {
     display: table;
@@ -217,10 +318,15 @@ font-size:16pt;
           <nav class="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <div class="openmenu sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+           &nbsp; &nbsp; &nbsp; &nbsp;
+<!--          <span onclick="openNav()">open</span>-->
           <!-- Search form -->
-          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp;&nbsp;&nbsp;
+
             <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" method="post">
                 {% csrf_token %}
             <div class="form-group mb-0">
@@ -242,16 +348,7 @@ font-size:16pt;
           </form>
           <!-- Navbar links -->
           <ul class="navbar-nav align-items-center  ml-md-auto ">
-            <li class="nav-item d-xl-none">
-              <!-- Sidenav toggler -->
-              <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main">
-                <div class="sidenav-toggler-inner">
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                </div>
-              </div>
-            </li>
+
             <li class="nav-item d-sm-none">
               <a class="nav-link" href="#" data-action="search-show" data-target="#navbar-search-main">
                 <i class="ni ni-zoom-split-in"></i>
@@ -378,6 +475,16 @@ font-size:16pt;
             </li>
           </ul>
           <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
+             <li class="nav-item d-sm-none">
+              <!-- Sidenav toggler -->
+              <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main2">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </div>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
@@ -447,11 +554,11 @@ font-size:16pt;
             <div class="tree" id="FamilyTreeDiv">
          <ul class="tree">
              <li>
-                 <a href="#" data-toggle="tooltip" data-original-title="ParentId:{{ tree.parent|parent_id }},Amount:{{ tree.parent|calculate_commission }},Child:{{ tree.parent|No_of_child }}">
+                 <a href="#" data-toggle="tooltip" data-original-title="PId:{{ tree.parent|parent_id }},Amt:{{ tree.parent|calculate_commission }},user:{{ tree.parent|No_of_child }}">
                      {{ tree.parent }}
                 <br>
 
-            <img src="{% static 'img/icons/common/profile.png' %}">
+            <img src="{% static 'img/icons/common/user_4.png' %}">
                       </a>
 <ul>
 {%for node in tree.sub_tree.all %}
@@ -466,8 +573,17 @@ font-size:16pt;
 </div>
 
      </div>
-</div>
 
+<script>
+  $('.openmenu').click(function(){
+  var x = document.getElementById("menu-bar");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+});
+</script>
 {% endblock %}
 
 

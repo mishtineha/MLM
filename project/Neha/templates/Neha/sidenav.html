@@ -3,23 +3,13 @@
 
 
 
-<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
       <!-- Brand -->
       <div class="sidenav-header  d-flex  align-items-center">
         <a class="navbar-brand" href="javascript:void(0)">
           <img src="https://i.dlpng.com/static/png/7105396_preview.png" class="navbar-brand-img" alt="...">
         </a>
-
-
-          <!-- Sidenav toggler -->
-          <div class="sidenav-toggler d-none d-xl-block" data-action="sidenav-pin" data-target="#sidenav-main">
-            <div class="sidenav-toggler-inner">
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-            </div>
-          </div>
 
       </div>
 
@@ -65,12 +55,14 @@
                 <span class="nav-link-text">Members Tree</span>
               </a>
             </li>
+
             <li class="nav-item">
               <a class="nav-link" href="{% url 'autopooltree' %}">
                 <i class="ni ni-bullet-list-67 text-default"></i>
                 <span class="nav-link-text">Auto Tree</span>
               </a>
             </li>
+
                      <li class="nav-item">
               <a class="nav-link" href="{% url 'edit-profile' %}">
                 <i class="ni ni-single-02 text-info"></i>
@@ -91,5 +83,6 @@
           <!-- Heading -->
         </div>
       </div>
+
     </div>
   </nav>

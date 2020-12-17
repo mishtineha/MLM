@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 @register.filter
-def calculate_commission(username,com=100,sum=0):
+def calculate_commission(username,com=250,sum=0):
     tree = Tree.objects.get(parent__user__username = username)
 
     if tree.sub_tree.all().count() == 0:

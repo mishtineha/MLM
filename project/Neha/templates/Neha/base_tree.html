@@ -4,10 +4,10 @@
 <li>
 <!-- <div class="col mx-auto">-->
 <!--        <div class="text-center"> -->
-    <a href="#" data-toggle="tooltip" data-original-title="ParentId:{{ node.parent|parent_id }},Amount:{{ node.parent|calculate_commission }},Child:{{ node.parent|No_of_child }}">
+    <a href="#" data-toggle="tooltip" data-original-title="PId:{{ node.parent|parent_id }},Amt:{{ node.parent|calculate_commission }},user:{{ node.parent|No_of_child }}">
             {{node.parent }}
             <br>
-            <img src="{% static 'img/icons/common/profile2.png' %}">
+            <img src="{% static 'img/icons/common/user_3.png' %}">
 </a>
 <!--        </div>-->
     {%if node.sub_tree %}

@@ -39,8 +39,9 @@ def No_of_child(username,count=0):
 
 @login_required
 def add_new(request):
-    if No_of_child(request.user.username) > 12:
-        message = 'Already 12 users are added you cannot add more!'
+    parent_tree = Tree.objects.get(parent=Profile.objects.get(user=request.user))
+    if len(parent_tree.sub_tree.all()) > 20:
+        message = 'Already 20 users are added you cannot add more!'
         context = {'message': message}
         return render(request, 'Neha/add_new.html', context)
 
@@ -55,7 +56,7 @@ def add_new(request):
         return render(request, 'Neha/add_new.html', context)
     if username and email:
         user = User.objects.create_user(username=username, password=password, email=email)
-        p = Profile.objects.create(user=user, email=email, phone=phone)
+        p = Profile.objects.create(user=user, email=email, phone=phone,created_by = request.user)
         t= Tree.objects.create(parent=p)
         parent_tree = Tree.objects.get(parent = Profile.objects.get(user = request.user))
         parent_tree.sub_tree.add(t)
@@ -101,6 +102,14 @@ def autopooltree(request):
         p = Profile.objects.get(user=request.user)
     except:
         return HttpResponse(status = 404)
+    if request.method == "POST":
+        data = request.POST['userid']
+        try:
+            tree = AutoTree.objects.get(parent__user__username=data)
+        except:
+            tree = AutoTree.objects.get(parent = p)
+            return render(request, 'Neha/tree.html', {'tree': tree, 'value': data, "message": "No user found"})
+        return render(request, 'Neha/tree.html', {'tree': tree,'value':data})
     tree = AutoTree.objects.get(parent = p)
     return render(request, 'Neha/tree.html', {'tree': tree,'len':len(tree.sub_tree.all())})
 
