@@ -55,13 +55,14 @@
                 <span class="nav-link-text">Members Tree</span>
               </a>
             </li>
-
+{% if request.user.profile.is_admin %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'autopooltree' %}">
                 <i class="ni ni-bullet-list-67 text-default"></i>
                 <span class="nav-link-text">Auto Tree</span>
               </a>
             </li>
+            {% endif %}
 
                      <li class="nav-item">
               <a class="nav-link" href="{% url 'edit-profile' %}">

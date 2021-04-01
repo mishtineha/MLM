@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     phone = models.IntegerField()
@@ -12,7 +12,7 @@ class Profile(models.Model):
     profile_pic = models.ImageField(upload_to='profile', default='default.png',null=True)
     pan_card = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add = True,null=True)
-    created_by = models.ForeignKey(User,on_delete = models.SET_NULL,null = True,related_name="created_by")
+    created_by = models.ForeignKey(User,on_delete = models.SET_NULL,null = True,related_name="created_by",blank=True)
     is_admin = models.BooleanField(default = False)
 
     def __str__(self):
