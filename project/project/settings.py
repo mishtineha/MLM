@@ -23,10 +23,13 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'c#iz!4f5#_ylv1un5fz+v7j^=ou%2dv3qp8#%9)^733$rg@r%i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE=True
 
 # Application definition
 
