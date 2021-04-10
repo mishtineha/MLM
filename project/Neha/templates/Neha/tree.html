@@ -78,12 +78,14 @@
                 <span class="nav-link-text">Members Tree</span>
               </a>
             </li>
+            {% if request.user.profile.is_admin %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'autopooltree' %}">
                 <i class="ni ni-bullet-list-67 text-default"></i>
                 <span class="nav-link-text">Auto Tree</span>
               </a>
             </li>
+            {% endif %}
                      <li class="nav-item">
               <a class="nav-link" href="{% url 'edit-profile' %}">
                 <i class="ni ni-single-02 text-info"></i>
@@ -554,7 +556,11 @@ font-size:16pt;
             <div class="tree" id="FamilyTreeDiv">
          <ul class="tree">
              <li>
+               {% if auto %}
+                <a href="#" data-toggle="tooltip">
+               {% else %}
                  <a href="#" data-toggle="tooltip" data-original-title="PId:{{ tree.parent|parent_id }},Amt:{{ tree.parent|calculate_commission }},user:{{ tree.parent|No_of_child }}">
+                   {% endif %}
                      {{ tree.parent }}
                 <br>
 
@@ -562,7 +568,7 @@ font-size:16pt;
                       </a>
 <ul>
 {%for node in tree.sub_tree.all %}
-    {%include "Neha/base_tree.html" %}
+    {%include "Neha/base_tree.html" with auto=auto %}
 {%endfor%}
     </ul>
              </li>

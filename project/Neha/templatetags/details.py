@@ -18,6 +18,21 @@ def calculate_commission(username,com=250,sum=0):
     return sum
 
 @register.filter
+def calculate_deleted_commission(username,com=250,sum=0):
+    tree = DeletedTree.objects.get(parent__user__username = username)
+
+    if tree.sub_tree.all().count() == 0:
+        com = com * 2
+
+        return sum
+    for t in tree.sub_tree.all():
+        sum = sum + com
+    com = com/2
+    for t in tree.sub_tree.all():
+        sum = calculate_commission(t.parent.user.username,com,sum)
+    return sum
+
+@register.filter
 def No_of_child(username,count=0):
     tree = Tree.objects.get(parent__user__username=username)
     count += len(tree.sub_tree.all())

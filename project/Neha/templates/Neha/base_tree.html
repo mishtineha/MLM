@@ -4,17 +4,31 @@
 <li>
 <!-- <div class="col mx-auto">-->
 <!--        <div class="text-center"> -->
+    {% if auto == True %}
+
+     <a href="#" data-toggle="tooltip">
+         {{node.parent }}
+            <br>
+         {% if node.parent.soft_delete %}
+    <img src="{% static 'img/icons/common/icons8-denied-80.png' %}">
+    {% else %}
+          <img src="{% static 'img/icons/common/user_1.png' %}">
+         {% endif %}
+         {% else %}
+
     <a href="#" data-toggle="tooltip" data-original-title="PId:{{ node.parent|parent_id }},Amt:{{ node.parent|calculate_commission }},user:{{ node.parent|No_of_child }}">
-            {{node.parent }}
+        {{node.parent }}
             <br>
             <img src="{% static 'img/icons/common/user_1.png' %}">
+        {% endif %}
+
 </a>
 <!--        </div>-->
     {%if node.sub_tree %}
 <!--        <div class="row" id="tree">-->
     <ul>
          {%for ch in node.sub_tree.all %}
-              {% with node=ch template_name="Neha/base_tree.html" %}
+              {% with node=ch auto=auto template_name="Neha/base_tree.html" %}
                    {%include template_name%}
               {%endwith%}
          {%endfor%}

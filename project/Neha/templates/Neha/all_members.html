@@ -32,13 +32,13 @@
                 <thead class="thead-dark">
 <tr>
     <th scope="col" class="sortable"  data-sort="name">Sr.No</th>
-                    <th scope="col" class="sortable"  data-sort="name">Add BY</th>
+                    <th scope="col" class="sortable"  data-sort="name">username</th>
                      <th scope="col" class="sort"  data-sort="name">Commision</th>
                      <th scope="col" class="sort"  data-sort="name">Date Joined</th>
-                    <th scope="col" class="sort"  data-sort="name">User Name</th>
-                    <th scope="col" class="sort"  data-sort="name">User Id</th>
+    <th scope="col" class="sort"  data-sort="status">status</th>
+<!--                    <th scope="col" class="sort"  data-sort="name">User Name</th>-->
+<!--                    <th scope="col" class="sort"  data-sort="name">User Id</th>-->
 
-                    <th scope="col" class="sort"  data-sort="name">Phone</th>
                     <th scope="col" class="sort"  data-sort="name">Email</th>
                     <th>Actions</th>
                 </tr>
@@ -58,36 +58,42 @@
                     </th>
                       <td class="name">
                       <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i>
-                        <span class="status">{{i.created_by}}</span>
-                      </span>
-                    </td>
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i>
-                        <span class="status">{{i.user.username|calculate_commission}}</span>
-                      </span>
-                    </td>
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i>
-                        <span class="status">{{i.created_at}}</span>
-                      </span>
-                    </td>
-                    <td class="budget">
-                      {{i.user.username}}
-                    </td>
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i>
-                        <span class="status">{{i.user.id}}</span>
+
+                        <span class="status">
+                            <a href="{% url 'update-profile' i.id %}">{{i.user.username}}
+                            </a></span>
                       </span>
                     </td>
 
                     <td>
-                      <div class="avatar-group">
-                          <span class="status">{{i.first_name}} {{i.last_name}}</span>
-                      </div>
+                      <span class="badge badge-dot mr-4">
+
+                        <span class="status">
+                            {% if i.soft_delete %}
+                            {{i.user.username|calculate_deleted_commission}}
+                            {% else %}
+                            {{i.user.username|calculate_commission}}
+                            {% endif %}
+                        </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+
+                        <span class="status">{{i.created_at}}</span>
+                      </span>
+                    </td>
+                       <td class="status">
+                      <span class="badge badge-dot mr-4">
+                          {% if i.soft_delete %}
+                        <i class="bg-warning"></i>
+                          <span class="status">In active</span>
+                          {% else %}
+                          <i class="bg-success"></i>
+                          <span class="status">active</span>
+                          {% endif %}
+
+                      </span>
                     </td>
 
                              <td>
@@ -98,12 +104,25 @@
                       </div>
                     </td>
                    <td>
-                      <div class="d-flex align-items-center">
-                          <a href="{% url 'update-profile' i.id %}" class="btn btn-primary btn-sm">Profile</a>
-                            <a href="{% url 'change-password' i.user.id %}" class="btn btn-success btn-sm">Change-Password</a>
-                          <div>
+                       <div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                         <a class="dropdown-item" href="{% url 'update-profile' i.id %}">Profile</a>
+                           {% if request.user.profile.is_admin and i.soft_delete == False %}
+
+                            <a class="dropdown-item" href="{% url 'change-password' i.user.id %}">Change-Password</a>
+
+                          <a class="dropdown-item" href="{% url 'add-member' i.user.id %}" >Add Member</a>
+                          <button class="btn btn-danger btn-sm dropdown-item" onclick="func({{ i.user.id }});">Delete</button>
+
+                          {% endif %}
                         </div>
                       </div>
+
+
+
                     </td>
                   </tr>
                 {% endfor %}
@@ -117,5 +136,23 @@
           {% include 'Neha/footer.html' %}
     </div>
 
-
+<script>
+    function func(id)
+    {
+    swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+  window.location = "../delete-member/" + id;
+  } else {
+    swal("Your data is safe!");
+  }
+});
+    }
+</script>
 {% endblock content %}

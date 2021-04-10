@@ -7,6 +7,7 @@ from django.shortcuts import render,redirect,HttpResponse
 from Neha.models import *
 from .forms import ProfileForm, PasswordChange
 from django.db.models import Count
+from django.db import transaction
 # Create your views here.
 
 @login_required
@@ -98,6 +99,8 @@ def add_auto_pool(request):
 
 @login_required
 def autopooltree(request):
+    if not request.user.profile.is_admin:
+        return HttpResponse(status=404)
     try:
         p = Profile.objects.get(user=request.user)
     except:
@@ -108,16 +111,14 @@ def autopooltree(request):
             tree = AutoTree.objects.get(parent__user__username=data)
         except:
             tree = AutoTree.objects.get(parent = p)
-            return render(request, 'Neha/tree.html', {'tree': tree, 'value': data, "message": "No user found"})
-        return render(request, 'Neha/tree.html', {'tree': tree,'value':data})
+            return render(request, 'Neha/tree.html', {'tree': tree, 'value': data, "message": "No user found","auto":True})
+        return render(request, 'Neha/tree.html', {'tree': tree,'value':data,"auto":True})
     tree = AutoTree.objects.get(parent = p)
-    return render(request, 'Neha/tree.html', {'tree': tree,'len':len(tree.sub_tree.all())})
+    return render(request, 'Neha/tree.html', {'tree': tree,'len':len(tree.sub_tree.all()),"auto":True})
 
 
 # @login_required
 def check_user(parent_username,child_username):
-    print("CHild username")
-    print(child_username)
     parent_tree = Tree.objects.get(parent__user__username = parent_username)
     if parent_tree.sub_tree.filter(parent__user__username = child_username).exists() or parent_username == child_username:
         return True
@@ -142,11 +143,18 @@ def tree(request):
 
 @login_required
 def member_list(request):
-    members = Profile.objects.all().exclude(user=request.user)    ###[30:40]
+    if request.user.profile.is_admin:
+        members = Profile.objects.all().exclude(user=request.user)
+        context = {
+            'members': members
+        }
+        return render(request, 'Neha/all_members.html', context)
+
+    members = Profile.objects.filter(soft_delete=False).exclude(user=request.user)    ###[30:40]
     mem = []
     for m in members:
         if check_user(request.user.username,m.user.username):
-            mem.append(m)
+                mem.append(m)
 
     context = {
         'members':mem
@@ -201,6 +209,8 @@ def admin_edit_profile(request,id):
 
 @login_required
 def change_password(request,id):
+    if not request.user.profile.is_admin:
+        return HttpResponse(status=404)
     new_pass = request.POST.get('new_password1')
     new_pass2 = request.POST.get('new_password2')
     if new_pass != new_pass2:
@@ -218,3 +228,75 @@ def change_password(request,id):
     else:
         form = PasswordChange()
     return render(request, 'Neha/change_password.html', {'form': form})
+
+@login_required
+def add_member(request,id):
+    if not request.user.profile.is_admin:
+        return HttpResponse(status=404)
+    if request.method == 'POST':
+        parent_user = User.objects.get(id=id)
+        if parent_user.profile.soft_delete:
+            return HttpResponse(status=404)
+        parent_tree = Tree.objects.get(parent=parent_user.profile)
+        if len(parent_tree.sub_tree.all()) > 20:
+            message = 'Already 20 users are added you cannot add more!'
+            context = {'message': message}
+            return render(request, 'Neha/add_new.html', context)
+
+        username = request.POST.get('username')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        password = username
+        if User.objects.filter(username=username).exists():
+            message = 'This Username already exists, please choose another one! '
+            context = {'message': message}
+            return render(request, 'Neha/add_new.html', context)
+        if username and email:
+            user = User.objects.create_user(username=username, password=password, email=email)
+            p = Profile.objects.create(user=user, email=email, phone=phone, created_by=request.user)
+            t = Tree.objects.create(parent=p)
+            parent_tree.sub_tree.add(t)
+            parent_tree.save()
+            child_tree = AutoTree.objects.create(parent=p)
+            autotree = AutoTree.objects.annotate(c=Count('sub_tree')).filter(c__lte=2)[0]
+            autotree.sub_tree.add(child_tree)
+            messages.success(request,f"{username} is added below {parent_user.username}")
+
+            return redirect('list')
+    return render(request, 'Neha/add_new.html')
+
+def delete(parent_profile):
+    tree = Tree.objects.get(parent=parent_profile)
+    parent_profile.soft_delete = True
+    parent_profile.save()
+    dt,c = DeletedTree.objects.get_or_create(parent=parent_profile)
+    for t in tree.sub_tree.all():
+        st,c = DeletedTree.objects.get_or_create(parent=t.parent)
+        dt.sub_tree.add(st)
+        dt.save()
+        delete(t.parent)
+
+    # dt.sub_tree.add(*tree.sub_tree.all())
+    # dt.save()
+    # tree.delete()
+
+
+@login_required
+def delete_member(request,id):
+    if not request.user.profile.is_admin:
+        return HttpResponse(status=404)
+    with transaction.atomic():
+        user = User.objects.get(id=id)
+        user.is_active = False
+        user.save()
+        p = Profile.objects.get(user=user)
+        delete(p)
+        tree = Tree.objects.get(parent=p)
+        # dt = DeletedTree.objects.create(parent=tree.parent)
+        # dt.sub_tree.add(*tree.sub_tree.all())
+        tree.delete()
+    messages.success(request, f"{user.username} deleted successfully")
+    return redirect('list')
+
+
+# sample_memeber3

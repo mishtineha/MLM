@@ -16,16 +16,20 @@
   <!-- Argon CSS -->
   <link rel="stylesheet" href="{% static 'css/argon.css'%}?v=1.2.0" type="text/css">
   <link rel="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="{% static 'vendor/sweetalert2/dist/sweetalert2.min.css' %}">
 </head>
 
 <body>
  {% block content %}
 {% endblock content %}
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>
-<!--  <script src="{% static 'vendor/jquery/dist/jquery.min.js'%}"></script>-->
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+<!--<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>-->
+  <script src="{% static 'vendor/jquery/dist/jquery.min.js'%}"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>-->
   <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" ></script>
   <script src="{% static 'vendor/js-cookie/js.cookie.js'%}"></script>
   <script src="{% static 'vendor/jquery.scrollbar/jquery.scrollbar.min.js'%}"></script>
   <script src="{% static 'vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js'%}"></script>
@@ -34,6 +38,7 @@
   <script src="{% static 'vendor/chart.js/dist/Chart.extension.js'%}"></script>
   <!-- Argon JS -->
   <script src="{% static 'js/argon.js'%}?v=1.2.0"></script>
+ <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     $(document).ready(function() {
     $('#datatables').DataTable();
